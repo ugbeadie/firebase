@@ -1,5 +1,11 @@
+import Auth from "./components/Auth";
+
 function App() {
-  return <p>learning firebase</p>;
+  return (
+    <>
+      <Auth />
+    </>
+  );
 }
 
 export default App;
