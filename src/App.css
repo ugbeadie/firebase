@@ -1,4 +1,4 @@
-* {
+/* * {
   padding: 0;
   margin: 0;
 }
@@ -6,6 +6,6 @@
 .container {
   margin: auto;
   width: 50%;
-  /* border: 3px solid green; */
+  border: 3px solid green;
   padding: 30px;
-}
+} */
