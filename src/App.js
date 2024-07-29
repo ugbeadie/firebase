@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import Auth from "./components/Auth";
 import { db } from "./config/firebase";
-import { getDocs, collection, addDoc } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import "./App.css";
 
 function App() {
@@ -12,23 +18,6 @@ function App() {
 
   const moviesCollectionRef = collection(db, "movies");
 
-  const getMovieList = async () => {
-    try {
-      const data = await getDocs(moviesCollectionRef);
-      const filteredData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setMovieList(filteredData);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    getMovieList();
-  }, []);
-
   const onSubmit = async () => {
     try {
       await addDoc(moviesCollectionRef, {
@@ -36,10 +25,30 @@ function App() {
         releaseDate: MovieReleaseDate,
         receivedAnOscar: isMovieAnOscar,
       });
-      getMovieList();
     } catch (err) {
       console.error(err);
     }
+  };
+
+  useEffect(() => {
+    const getMovieList = async () => {
+      try {
+        const data = await getDocs(moviesCollectionRef);
+        const filteredData = data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setMovieList(filteredData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getMovieList();
+  }, [onSubmit]);
+
+  const deleteMovie = async (id) => {
+    const movieDoc = doc(db, "movies", id);
+    await deleteDoc(movieDoc);
   };
 
   return (
@@ -70,6 +79,7 @@ function App() {
             {movie.title}
           </h1>
           <p>Date: {movie.releaseDate}</p>
+          <button onClick={() => deleteMovie(movie.id)}>delete movie</button>
         </div>
       ))}
     </>
