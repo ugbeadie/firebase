@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Auth from "./components/Auth";
-import { db } from "./config/firebase";
+import { auth, db } from "./config/firebase";
 import {
   getDocs,
   collection,
@@ -24,6 +24,7 @@ function App() {
         title: MovieTitle,
         releaseDate: MovieReleaseDate,
         receivedAnOscar: isMovieAnOscar,
+        userId: auth?.currentUser?.uid,
       });
     } catch (err) {
       console.error(err);
